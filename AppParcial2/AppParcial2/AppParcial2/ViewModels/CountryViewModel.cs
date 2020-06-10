@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppParcial2.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +8,10 @@ namespace AppParcial2.ViewModels
     class CountryViewModel:BaseViewModel
     {
         //apiservice
+        #region Service
+        private ApiService apiService;
+
+        #endregion
 
         #region Attributes
         private string name;
@@ -35,6 +40,7 @@ namespace AppParcial2.ViewModels
         #region Constructor
         public CountryViewModel()
         {
+            apiService = new ApiService();
             this.LoadCountry();
         }
         #endregion
@@ -42,7 +48,14 @@ namespace AppParcial2.ViewModels
         #region Methods
         private void LoadCountry()
         {
-            //llamar api
+            var country = await this.apiService.Get<Country>(
+                "https://restcountries.eu/",
+                "rest/v2",
+                "name/bolivia"
+                );
+            this.Name = country[0].Name;
+            this.Capital = country[0].Capital;
+            this.Alpha2code = country[0].Alpha2code;
         }
         #endregion
     }
